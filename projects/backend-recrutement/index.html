@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plateforme de Recrutement — Article technique</title>
+    <link rel="stylesheet" href="../css/projects.css">
+</head>
+<body>
+    <div class="window">
+        <div class="title-bar">
+            <span><span class="title-icon">🗂️</span> Plateforme de Recrutement</span>
+            <a class="back-link" href="../index.html">← Projets</a>
+        </div>
+        <div class="content">
+            <h1>Plateforme de Recrutement</h1>
+            <p class="subtitle">Article technique — API Express.js, authentification &amp; bases de données</p>
+            <p>
+                Ce projet académique (module SR10) consiste en une <strong>application de recrutement</strong> :
+                une API backend modulaire construite avec <strong>Node.js / Express.js</strong>, sécurisée par un
+                <strong>middleware d'authentification</strong>, et adossée à deux systèmes de bases de données :
+                <strong>PostgreSQL</strong> (relationnel) et <strong>MongoDB</strong> (NoSQL). Contrairement aux
+                autres projets du portfolio, celui-ci est présenté sous forme d'étude technique, sans exécution
+                en ligne.
+            </p>
+
+            <div class="badges">
+                <span class="badge">Node.js</span>
+                <span class="badge">Express.js</span>
+                <span class="badge">PostgreSQL</span>
+                <span class="badge">MongoDB</span>
+                <span class="badge">JWT</span>
+                <span class="badge">bcrypt</span>
+            </div>
+
+            <!-- ============================================================ -->
+            <h2>1. Architecture de l'API</h2>
+            <p>
+                L'API suit une architecture en couches : <strong>routes</strong> (définition des endpoints),
+                <strong>middlewares</strong> (validation, authentification), <strong>services</strong>
+                (logique métier) et <strong>accès aux données</strong>. Cette séparation rend chaque brique
+                testable indépendamment et facilite l'ajout de nouveaux endpoints.
+            </p>
+
+            <h3>1.1 Routage modulaire (Express)</h3>
+            <p>
+                Le routeur est découpé par domaine : <code>auth</code>, <code>candidatures</code>,
+                <code>offres</code>, <code>administrateurs</code>. Chaque module exporte un
+                <code>Router</code> Express monté sur l'application principale.
+            </p>
+            <div class="code-block"><span class="comment">// src/index.js — point d'entrée de l'application</span>
+<span class="keyword">const</span> express = <span class="fn">require</span>(<span class="string">'express'</span>);
+<span class="keyword">const</span> app = express();
+
+app.<span class="fn">use</span>(express.json());                      <span class="comment">// parse du corps JSON</span>
+app.<span class="fn">use</span>(<span class="string">'/api/auth'</span>, <span class="fn">require</span>(<span class="string">'./routes/auth.routes'</span>));
+app.<span class="fn">use</span>(<span class="string">'/api/offres'</span>, <span class="fn">require</span>(<span class="string">'./routes/offres.routes'</span>));
+app.<span class="fn">use</span>(<span class="string">'/api/candidatures'</span>, <span class="fn">require</span>(<span class="string">'./routes/candidatures.routes'</span>));
+app.<span class="fn">use</span>(<span class="string">'/api/admin'</span>, <span class="fn">require</span>(<span class="string">'./routes/admin.routes'</span>));
+
+<span class="keyword">const</span> PORT = process.env.PORT || <span class="number">3000</span>;
+app.<span class="fn">listen</span>(PORT, () =&gt; console.<span class="fn">log</span>(<span class="string">`API démarrée sur le port ${PORT}`</span>));</div>
+
+            <h3>1.2 Middleware d'authentification</h3>
+            <p>
+                Un middleware centralisé vérifie le <strong>JWT</strong> (JSON Web Token) présent dans
+                l'en-tête <code>Authorization</code>, puis charge l'utilisateur correspondant dans la requête.
+                Il protège ainsi toutes les routes qui nécessitent une session authentifiée, sans dupliquer
+                la logique dans chaque route.
+            </p>
+            <div class="code-block"><span class="comment">// src/middlewares/auth.middleware.js</span>
+<span class="keyword">const</span> jwt = <span class="fn">require</span>(<span class="string">'jsonwebtoken'</span>);
+
+<span class="keyword">function</span> <span class="fn">authentifier</span>(req, res, next) {
+  <span class="keyword">const</span> header = req.headers.authorization;
+  <span class="keyword">if</span> (!header || !header.<span class="fn">startsWith</span>(<span class="string">'Bearer '</span>)) {
+    <span class="keyword">return</span> res.status(<span class="number">401</span>).<span class="fn">json</span>({ erreur: <span class="string">'Token manquant'</span> });
+  }
+  <span class="keyword">const</span> token = header.<span class="fn">split</span>(<span class="string">' '</span>)[<span class="number">1</span>];
+  <span class="keyword">try</span> {
+    <span class="keyword">const</span> payload = jwt.<span class="fn">verify</span>(token, process.env.JWT_SECRET);
+    req.utilisateur = payload;               <span class="comment">// { id, role }</span>
+    next();
+  } <span class="keyword">catch</span> (err) {
+    <span class="keyword">return</span> res.status(<span class="number">401</span>).<span class="fn">json</span>({ erreur: <span class="string">'Token invalide ou expiré'</span> });
+  }
+}
+
+<span class="comment">// Utilisation : protéger une route</span>
+<span class="comment">// router.post('/', authentifier, controller.creerOffre);</span></div>
+
+            <p>
+                Un second middleware, <code>exigerRole</code>, s'appuie sur <code>req.utilisateur.role</code>
+                pour restreindre certaines routes (ex. création d'une offre réservée aux recruteurs).
+                Les mots de passe sont stockés <strong>hachés avec bcrypt</strong> (jamais en clair).
+            </p>
+
+            <!-- ============================================================ -->
+            <h2>2. Architecture des bases de données</h2>
+            <p>
+                Le projet exploite <strong>deux paradigmes</strong> complémentaires : le relationnel
+                (PostgreSQL) pour les données transactionnelles fortement liées, et NoSQL (MongoDB) pour
+                les données semi-structurées et les parcours de candidature.
+            </p>
+
+            <h3>2.1 Modèle relationnel — PostgreSQL</h3>
+            <p>
+                Le schéma relationnel gère les entités <code>utilisateurs</code>, <code>offres</code> et
+                <code>candidatures</code>, reliées par des clés étrangères et contraintes d'intégrité.
+            </p>
+            <div class="code-block"><span class="comment">-- Schéma PostgreSQL simplifié</span>
+<span class="keyword">CREATE TABLE</span> utilisateurs (
+    id          SERIAL <span class="keyword">PRIMARY KEY</span>,
+    email       TEXT <span class="keyword">UNIQUE NOT NULL</span>,
+    mot_de_passe TEXT <span class="keyword">NOT NULL</span>,      <span class="comment">-- hash bcrypt</span>
+    role        TEXT <span class="keyword">NOT NULL</span> <span class="keyword">DEFAULT</span> <span class="string">'candidat'</span>,
+    cree_le     TIMESTAMPTZ <span class="keyword">DEFAULT now()</span>
+);
+
+<span class="keyword">CREATE TABLE</span> offres (
+    id          SERIAL <span class="keyword">PRIMARY KEY</span>,
+    titre       TEXT <span class="keyword">NOT NULL</span>,
+    description TEXT,
+    recruteur_id INTEGER <span class="keyword">REFERENCES</span> utilisateurs(id),
+    cree_le     TIMESTAMPTZ <span class="keyword">DEFAULT now()</span>
+);
+
+<span class="keyword">CREATE TABLE</span> candidatures (
+    id            SERIAL <span class="keyword">PRIMARY KEY</span>,
+    offre_id      INTEGER <span class="keyword">REFERENCES</span> offres(id),
+    candidat_id   INTEGER <span class="keyword">REFERENCES</span> utilisateurs(id),
+    statut        TEXT <span class="keyword">DEFAULT</span> <span class="string">'en_attente'</span>,
+    <span class="keyword">UNIQUE</span> (offre_id, candidat_id)   <span class="comment">-- un candidat ne postule qu'une fois</span>
+);</div>
+
+            <p>Exemple de requête d'agrégation :</p>
+            <div class="code-block"><span class="comment">-- Nombre de candidatures par offre</span>
+<span class="keyword">SELECT</span> o.titre,
+       <span class="fn">COUNT</span>(c.id) <span class="keyword">AS</span> nb_candidatures
+<span class="keyword">FROM</span> offres o
+<span class="keyword">LEFT JOIN</span> candidatures c <span class="keyword">ON</span> c.offre_id = o.id
+<span class="keyword">GROUP BY</span> o.id
+<span class="keyword">ORDER BY</span> nb_candidatures <span class="keyword">DESC</span>;</div>
+
+            <h3>2.2 Modèle NoSQL — MongoDB</h3>
+            <p>
+                MongoDB stocke le <strong>parcours de candidature</strong> sous forme de documents imbriqués :
+                chaque candidature embarque l'historique des statuts, les notes d'entretien et les documents
+                associés — un modèle adapté à des données dont la structure évolue au fil du processus.
+            </p>
+            <div class="code-block"><span class="comment">// Document MongoDB — candidature enrichie</span>
+{
+  <span class="string">"offreId"</span>: <span class="string">"ObjectId('...')"</span>,
+  <span class="string">"candidatId"</span>: <span class="string">"ObjectId('...')"</span>,
+  <span class="string">"historique"</span>: [
+    { <span class="string">"statut"</span>: <span class="string">"en_attente"</span>, <span class="string">"date"</span>: <span class="string">"2026-01-10"</span> },
+    { <span class="string">"statut"</span>: <span class="string">"entretien"</span>, <span class="string">"date"</span>: <span class="string">"2026-01-17"</span> }
+  ],
+  <span class="string">"notes"</span>: [<span class="string">"Très bon profil backend"</span>, <span class="string">"À revoir sur SQL"</span>]
+}</div>
+
+            <p>Exemple d'agrégation MongoDB (pipeline) :</p>
+            <div class="code-block"><span class="comment">// Nombre de candidatures par statut</span>
+db.candidatures.<span class="fn">aggregate</span>([
+  { <span class="string">$group</span>: { _id: <span class="string">"$statut"</span>, total: { <span class="string">$sum</span>: <span class="number">1</span> } } },
+  { <span class="string">$sort</span>: { total: -<span class="number">1</span> } }
+]);</div>
+
+            <!-- ============================================================ -->
+            <h2>3. Diagrammes</h2>
+            <p>
+                Les diagrammes de conception proviennent du <strong>premier livrable</strong> du projet
+                (modélisation conceptuelle et logique, cas d'usage, arborescence du site).
+            </p>
+
+            <figure class="diagram">
+                <img src="assets/mcd.png" alt="MCD — Modèle Conceptuel de Données (PostgreSQL)">
+                <figcaption>📐 MCD — Modèle Conceptuel de Données : entités Utilisateur, Candidat, Recruteur, Offre, Candidature et leurs associations.</figcaption>
+            </figure>
+
+            <div class="diagram diagram-wide">
+                <img src="assets/usecase.png" alt="Diagramme de cas d'utilisation">
+                <div class="diagram-caption">🎭 Cas d'utilisation : parcours Candidat, Recruteur et Administrateur.</div>
+            </div>
+
+            <p>Le <strong>MLD</strong> (Modèle Logique de Données) correspondant
+            (<a href="assets/mld.txt" download>télécharger le .txt</a>) :</p>
+            <div class="code-block"><span class="comment">-- MLD — Modèle Logique de Données (PostgreSQL)</span>
+Organisation (id_orga PK: int, Siren: int, nom_orga: str, type: str, adresse_siege: str)
+
+Utilisateur (id_user PK: int, email: str, motDePasse: str, nom: str, prenom: str, num_tel: str,
+            date_crea_compte: date, statut_compte: {"actif","inactif"},
+            type_user: {"Candidat", "Recruteur", "Administrateur"},
+            *orga =&gt; Organisation.Siren)
+
+OffredEmploi (num PK: int, etat: {"non publiée [en cours d'édition]", "publiée", "expirée"},
+             date_validite: date, liste_piece: str, nb_piece: int,
+             *ficheposte =&gt; FicheDePoste.id_ficheposte,
+             *recruteurdeposant =&gt; Utilisateur.id_user)
+
+FicheDePoste (id_ficheposte: int, intitule: str, statut_poste: str, resp_hierarchique: str,
+               type_metier: str, lieu: str, rythme: str, fourchette_salaire: str,
+               description_mission: str, *recruteurproposant =&gt; Utilisateur.id_user)
+
+Candidature (id_candidature PK: int, date_candidature: date, piece_jointe: str,
+             *candidat =&gt; Utilisateur.id_user, *offre =&gt; OffredEmploi.num)</div>
+
+            <figure class="diagram">
+                <img src="assets/sitemap.png" alt="Site Map — arborescence des pages">
+                <figcaption>🗺️ Site Map — arborescence des pages de l'application (visiteur, candidat, recruteur, administrateur).</figcaption>
+            </figure>
+
+            <!-- ============================================================ -->
+            <h2>4. Sécurité &amp; bonnes pratiques</h2>
+            <table>
+                <thead>
+                    <tr><th>Aspect</th><th>Mesure mise en place</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Mots de passe</td><td>Hachage bcrypt, jamais stockés en clair</td></tr>
+                    <tr><td>Sessions</td><td>JWT signé (secret d'environnement <code>JWT_SECRET</code>)</td></tr>
+                    <tr><td>CSRF</td><td>Analyse de la vulnérabilité et contre-mesures (rapport TD6)</td></tr>
+                    <tr><td>Validation</td><td>Validation des entrées (types, longueurs, formats email)</td></tr>
+                    <tr><td>Erreurs</td><td>Réponses HTTP standardisées (400, 401, 403, 404, 500)</td></tr>
+                </tbody>
+            </table>
+
+            <div class="note">
+                💡 Ce projet a été livré en sprints avec documentation : rapport de vulnérabilité CSRF,
+                livrables intermédiaires et revue de code. Les sources sont disponibles sur demande.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

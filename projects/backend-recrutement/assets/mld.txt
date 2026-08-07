@@ -1,0 +1,14 @@
+
+Organisation (id_orga PK : ID, Siren : int, nom_orga : str, type : str, adresse_siege: str)
+
+Création ID, plus court, moins consommateur
+
+Utilisateur (id_user PK : int, email : str, motDePasse : str, nom : str, prenom : str, num_tel : str, date_crea_compte : date, statut_compte : {"actif","inactif"}, type_user : {"Candidat", "Recruteur", "Administrateur"}, *orga => Organisation.Siren)
+
+Choix : héritage par classe mère
+
+OffredEmploi (num PK : int, etat : {"non publiée [en cours d’édition]", "publiée", "expirée"}, date_validite : date, liste_piece : str, nb_piece : int, *ficheposte => FicheDePoste.id_ficheposte, *recruteurdeposant => Utilisateur.id_user)
+
+FicheDePoste (id_ficheposte : int, intitule : str, statut_poste : str, resp_hierarchique : str, type_metier : str, lieu : str, rythme : str, fourchette_salaire : str, description_mission : str, *recruteurproposant => Utilisateur.id_user)
+
+Candidature (id_candidature PK : int, date_candidature : date, piece_jointe : , *candidat => Utilisateur.id_user, *offre => OffredEmploi.num)

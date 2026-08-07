@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harmonies — Projet (Terminal)</title>
+    <link rel="stylesheet" href="../css/projects.css">
+    <!-- xterm.js : émulateur de terminal dans le navigateur -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/css/xterm.min.css">
+    <style>
+        /* Design "terminal" : fond noir, texte monospace vert/blanc */
+        body { background-color: #000; }
+        .window { background-color: #000; border-color: #333; box-shadow: none; }
+        .content { background-color: #000; }
+        h1, h2, h3, .subtitle { color: #00ff66; border-color: #00ff66; }
+        p, li { color: #d0d0d0; }
+        .title-bar { background: linear-gradient(90deg, #001a00, #003300); }
+        a { color: #00ff66; }
+        .terminal-window { border-color: #444 #000 #000 #444; }
+        .terminal-title-bar { background: #001a00; color: #00ff66; }
+        .badge { color: #00ff66; background-color: #000; border-color: #00ff66 #003300 #003300 #00ff66; }
+        .note { background-color: #001a00; color: #c0ffc0; border-color: #00ff66 #003300 #003300 #00ff66; }
+        .terminal-commands { background-color: #0a0a0a; color: #a0ffa0; border-color: #00ff66 #003300 #003300 #00ff66; }
+        .terminal-commands code { background-color: #001a00; color: #00ff66; }
+    </style>
+</head>
+<body>
+    <div class="window">
+        <div class="title-bar">
+            <span><span class="title-icon">🎲</span> Harmonies — Version Terminal</span>
+            <a class="back-link" href="../index.html" style="color:#00ff66;">← Projets</a>
+        </div>
+        <div class="content">
+            <h1>Harmonies</h1>
+            <p class="subtitle">Jeu de société en C++ — exécuté en mode console dans votre navigateur</p>
+
+            <p>
+                Harmonies a été développé en <strong>C++</strong> avec une double interface :
+                une version graphique <strong>Qt</strong> et une version <strong>Terminal (CLI)</strong>
+                (le binaire <code>harmonies_console</code> du projet). Cette page exécute la version
+                console dans un terminal simulé par <strong>xterm.js</strong> : il s'agit d'un port
+                JavaScript <strong>fidèle</strong> du code C++ (mêmes règles, mêmes menus,
+                même affichage), jouable immédiatement dans le navigateur.
+            </p>
+
+            <p>
+                Le <strong>code source C++ d'origine</strong> se trouve dans
+                <code>LO21projet/</code> : <code>main_console.cpp</code>,
+                <code>ConsoleInputHandler.cpp</code>, <code>ConsoleRenderer.cpp</code>,
+                <code>SetupMenu.cpp</code> et le moteur (<code>core/</code>, <code>rules/</code>,
+                <code>scoring/</code>). Le port JavaScript reprend exactement la même logique :
+                coordonnées hexagonales <em>even-q offset</em>, règles d'empilement des jetons,
+                motifs des cartes animales, esprits de la nature et calcul de score.
+            </p>
+
+            <div class="terminal-window">
+                <div class="terminal-title-bar">
+                    <span>harmonies.exe — Console</span>
+                    <span>▣</span>
+                </div>
+                <div class="terminal-body">
+                    <div id="terminal"></div>
+                </div>
+            </div>
+
+            <div class="terminal-commands">
+                <strong>Déroulement d'une partie (identique au C++) :</strong><br>
+                <strong>1.</strong> Configuration : nombre de joueurs (1-4), côté du plateau
+                (A/B), option « Esprit de la nature » (y/n), noms des joueurs.<br>
+                <strong>2.</strong> Chaque tour : choisir une action dans le menu numéroté
+                (prendre un slot du marché, prendre une carte animale, choisir son esprit,
+                poser un cube animal/esprit…).<br>
+                <strong>3.</strong> Poser les jetons obligatoires sur le plateau hexagonal
+                (coordonnées <code>q r</code>) puis terminer son tour.<br>
+                <strong>Légende :</strong> <code>W</code>=Eau &nbsp;<code>S</code>=Pierre
+                &nbsp;<code>E</code>=Terre &nbsp;<code>T</code>=Arbre &nbsp;<code>F</code>=Champ
+                &nbsp;<code>B</code>=Bâtiment &nbsp;(minuscule = cube posé)
+            </div>
+
+            <h2>Compiler la version C++ en WebAssembly (optionnel)</h2>
+            <p>
+                Le port JavaScript ci-dessus suffit pour jouer. Pour exécuter le <em>vrai</em> code
+                C++ compilé en WebAssembly, compilez la version console (qui n'utilise pas Qt)
+                avec Emscripten :
+            </p>
+            <div class="code-block"><span class="comment"># Depuis LO21projet (liste des sources identique au .pro console)</span>
+emcc src/main_console.cpp \
+    $(find src/core src/model src/rules src/scoring src/ui src/utils -name '*.cpp' ! -path '*/qt/*' ! -name 'VuePartie.cpp') \
+    -I include \
+    -std=c++17 -O3 \
+    -s WASM=1 \
+    -s MODULARIZE=1 \
+    -s EXPORT_NAME=createHarmoniesModule \
+    -s ALLOW_MEMORY_GROWTH=1 \
+    -s NO_EXIT_RUNTIME=1 \
+    -o game/harmonies.js</div>
+            <p>
+                Cette piste WASM n'est pas encore câblée dans le port actuel : le terminal
+                exécute pour l'instant le port JavaScript fidèle, qui reproduit déjà les mêmes
+                règles et le même déroulement que le binaire <code>harmonies_console</code>.
+            </p>
+
+            <h2>Le projet</h2>
+            <div class="panel" style="background:#0a0a0a; border-color:#00ff66 #003300 #003300 #00ff66; color:#d0d0d0;">
+                <ul style="margin:6px 0; padding-left:22px;">
+                    <li>Programmation de la logique d'état complexe (manches, tours, placement, scoring) et gestion des timers.</li>
+                    <li>Développement d'une interface graphique interactive avec le framework Qt, en plus de la version console.</li>
+                    <li>Architecture découpée en services testés (TurnManager, PlacementValidator, ScoreCalculator…).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/lib/xterm.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@xterm/addon-fit@0.10.0/lib/addon-fit.min.js"></script>
+    <script src="terminal.js"></script>
+</body>
+</html>

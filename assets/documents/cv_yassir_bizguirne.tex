@@ -1,0 +1,134 @@
+% !TEX program = pdflatex
+% ============================================================
+%  CV — Yassir BIZGUIRNE
+%  Compilation : pdflatex cv_yassir_bizguirne.tex
+% ============================================================
+\documentclass[10pt,a4paper]{article}
+
+% ---------------------- Packages ---------------------------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper,margin=1.3cm,top=0.8cm,bottom=0.7cm]{geometry}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\renewcommand{\baselinestretch}{0.92}
+
+% ----------------------- Couleurs --------------------------
+\definecolor{cvblue}{RGB}{22,78,140}
+\definecolor{cvgrey}{RGB}{92,92,92}
+
+% ----------------------- Mise en page ----------------------
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlist[itemize]{leftmargin=1.25em,itemsep=0.3pt,topsep=0.3pt}
+\renewcommand{\labelitemi}{\textcolor{cvblue}{\raisebox{0.2ex}{\scriptsize$\bullet$}}}
+
+% ------------------- Style des sections --------------------
+\titleformat{\section}
+  {\normalfont\large\bfseries\color{cvblue}}
+  {}{0em}{}
+  [\vspace{0.05em}{\color{cvblue}\titlerule[1.1pt]}]
+\titlespacing{\section}{0pt}{0.32em}{0.15em}
+
+% Entrée "Titre à gauche — date à droite"
+\newcommand{\entry}[2]{%
+  \noindent\textbf{#1}\hfill{\small\textcolor{cvgrey}{#2}}\par\vspace{0.5pt}}
+
+\begin{document}
+
+% ========================= EN-TÊTE =========================
+\begin{center}
+  {\Huge\bfseries Yassir BIZGUIRNE}\\[0.15em]
+  {\large\color{cvblue}\bfseries Stage Ingénieur / Assistant Ingénieur | Informatique \& Data Science}\\[0.12em]
+  {\normalsize Étudiant Ingénieur à l'Université de Technologie de Compiègne (UTC)}\\[0.25em]
+  {\small +33 7 4480 0846 \textbullet\ \href{mailto:yassirbizguirne05@gmail.com}{yassirbizguirne05@gmail.com} \textbullet\ Cavaria con Premezzo, Italie}
+\end{center}
+
+\vspace{0.05em}
+
+\noindent\textit{Élève ingénieur passionné par le \textbf{développement logiciel}, l'\textbf{intelligence artificielle générative} et l'\textbf{optimisation des processus}. Combine un solide bagage technique (\textbf{backend}, \textbf{bases de données}) avec une expérience industrielle concrète et réussie.}
+
+% ======================== FORMATIONS ========================
+\section{Formations}
+
+\entry{Diplôme d'ingénieur en Génie Informatique --- Université de Technologie de Compiègne (UTC)}{2023 -- 2028}
+\begin{itemize}
+  \item 2025 -- Présent : Cycle Ingénieur --- Spécialisation \textbf{Génie Informatique}.
+  \item 2023 -- 2025 : Cycle Préparatoire Intégré (Tronc Commun UTC).
+\end{itemize}
+
+\entry{Baccalauréat européen --- Scuola Europea di Varese (Mention Très Bien)}{2023}
+\begin{itemize}
+  \item Spécialisation \textbf{Mathématiques}, \textbf{Physique} et \textbf{Chimie}.
+\end{itemize}
+
+% ================== EXPÉRIENCES PROFESSIONNELLES ============
+\section{Expériences Professionnelles}
+
+\entry{Stagiaire Ingénieur --- Développement \& Optimisation Logistique, \textbf{ZEISS Sunlens}, Castiglione Olona (Italie)}{Janvier 2025 -- Février 2025}
+\begin{itemize}
+  \item Développement autonome d'une application métier de gestion d'inventaire sur \textbf{Microsoft PowerApps}, synchronisée avec une base de données \textbf{Excel}.
+  \item Implémentation d'un système de traçabilité par \textbf{scan de QR codes} pour localiser et mettre à jour les stocks en \textbf{temps réel}.
+  \item Pilotage de la réorganisation physique de l'entrepôt selon la méthodologie \textbf{Lean Manufacturing (5S)}, réduisant drastiquement les temps de recherche.
+  \item Bilan : évaluation « Excellente » par la direction pour l'autonomie démontrée et des résultats dépassant les objectifs.
+\end{itemize}
+
+\entry{Journaliste / Chargé de Communication --- Scuola Europea di Varese, Bruxelles (Belgique)}{2023}
+\begin{itemize}
+  \item Gestion de la communication média d'une conférence de l'\textbf{Union Européenne} : interviews, captation photographique, gestion \textbf{Instagram}.
+\end{itemize}
+
+\entry{Traducteur Technique Indépendant (Freelance)}{2021}
+\begin{itemize}
+  \item Traduction professionnelle d'un manuel industriel de \textbf{80 pages} de l'\textbf{italien} vers l'\textbf{arabe}, avec adaptation culturelle.
+\end{itemize}
+
+% ===================== PROJETS ACADÉMIQUES ==================
+\section{Projets Académiques}
+
+\entry{Développement d'un jeu vidéo d'enquête 3D propulsé par l'IA}{}
+\noindent{\small\textbf{Unity 6000} \,|\, \textbf{API OpenAI (GPT-4o)} \,|\, \textbf{Sora} \,|\, \textbf{DaVinci Resolve}}\par\vspace{1pt}
+\begin{itemize}
+  \item Implémentation d'un système de navigation (\textbf{NavMesh}) pour un gameplay immersif « Point \& Click » et gestion multi-scènes.
+  \item Génération de dialogues dynamiques via un \textbf{Prompt Engineering} strict pour verrouiller les profils psychologiques des \textbf{PNJ}.
+  \item Création d'un trailer promotionnel avec l'IA vidéo \textbf{Sora} et montage de continuité visuelle.
+\end{itemize}
+
+\entry{Développement d'un middleware de routage et d'authentification}{}
+\noindent{\small\textbf{Node.js} \,|\, \textbf{Express.js}}\par\vspace{1pt}
+\begin{itemize}
+  \item Création d'un routeur \textbf{backend} modulaire pour la gestion centralisée des accès.
+  \item Implémentation des logiques de \textbf{sécurité} et d'\textbf{authentification utilisateur}.
+\end{itemize}
+
+\entry{Architecture et gestion de bases de données}{}
+\noindent{\small\textbf{PostgreSQL} \,|\, \textbf{MongoDB}}\par\vspace{1pt}
+\begin{itemize}
+  \item Modélisation, conception et manipulation de systèmes de bases de données \textbf{relationnelles} et \textbf{NoSQL}.
+  \item Écriture de requêtes et de scripts de manipulation de données complexes.
+\end{itemize}
+
+\entry{Conception et développement d'un jeu vidéo de société}{}
+\noindent{\small\textbf{C++} \,|\, \textbf{Qt}}\par\vspace{1pt}
+\begin{itemize}
+  \item Programmation de la \textbf{logique d'état complexe} et de la gestion des \textbf{timers}.
+  \item Développement et câblage de l'\textbf{interface graphique interactive} avec le framework \textbf{Qt}.
+\end{itemize}
+
+% ======================== COMPÉTENCES =======================
+\section{Compétences}
+\begin{itemize}
+  \item \textbf{Programmation} : C++, Python, HTML/CSS, SQL.
+  \item \textbf{Technologies \& Outils} : Express.js, Node.js, PostgreSQL, MongoDB, Unity, Microsoft PowerApps, DaVinci Resolve, Qt, Git.
+  \item \textbf{Méthodologies} : Lean Manufacturing (5S), Optimisation Logistique, Conception CAD.
+  \item \textbf{Langues} : Italien (bilingue --- langue maternelle), Français (courant), Anglais (courant), Arabe (courant).
+  \item \textbf{Soft skills} : Autonomie, Force de proposition, Rigueur, Travail d'équipe, Curiosité.
+\end{itemize}
+
+% ====================== CENTRES D'INTÉRÊT ===================
+\section{Centres d'intérêt}
+\noindent Course à pied \textbullet{} Basketball \textbullet{} Salle de sport \textbullet{} Taekwondo \textbullet{} Lecture \textbullet{} Membre de l'association étudiante UTCypher (Breakdance)
+
+\end{document}

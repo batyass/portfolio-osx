@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f2f4f7"/>
+      <stop offset="0.5" stop-color="#cdd3da"/>
+      <stop offset="1" stop-color="#aab2bc"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="128" cy="78" rx="66" ry="18" fill="#e6eaef" stroke="#98a1ab" stroke-width="4"/>
+  <rect x="62" y="76" width="132" height="128" rx="16" fill="none" stroke="#9aa3ad" stroke-width="5"/>
+  <rect x="62" y="76" width="132" height="22" rx="11" fill="url(#metal)" stroke="#98a1ab" stroke-width="3"/>
+  <rect x="62" y="184" width="132" height="20" rx="10" fill="url(#metal)" stroke="#98a1ab" stroke-width="3"/>
+  <g stroke="#aeb6c0" stroke-width="3" opacity="0.9">
+    <line x1="83" y1="98" x2="83" y2="184"/><line x1="104" y1="98" x2="104" y2="184"/>
+    <line x1="125" y1="98" x2="125" y2="184"/><line x1="146" y1="98" x2="146" y2="184"/>
+    <line x1="167" y1="98" x2="167" y2="184"/>
+  </g>
+  <g stroke="#c2c9d1" stroke-width="3" opacity="0.8">
+    <line x1="62" y1="116" x2="194" y2="116"/><line x1="62" y1="136" x2="194" y2="136"/>
+    <line x1="62" y1="156" x2="194" y2="156"/><line x1="62" y1="176" x2="194" y2="176"/>
+  </g>
+  <g fill="#ffffff" stroke="#d7dce2" stroke-width="2">
+    <polygon points="96,74 120,60 112,84"/>
+    <polygon points="140,78 158,64 150,88"/>
+    <polygon points="118,66 132,52 136,72"/>
+  </g>
+</svg>

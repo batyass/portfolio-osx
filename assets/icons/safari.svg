@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="tile" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#d4e7f7"/>
+    </linearGradient>
+    <linearGradient id="bezel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f2f4f7"/>
+      <stop offset="0.5" stop-color="#c9cfd8"/>
+      <stop offset="1" stop-color="#aab3bf"/>
+    </linearGradient>
+    <radialGradient id="dial" cx="40%" cy="35%" r="80%">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#e4ecf5"/>
+    </radialGradient>
+  </defs>
+  <rect x="10" y="10" width="236" height="236" rx="54" fill="url(#tile)" stroke="#b9c6d4" stroke-width="4"/>
+  <circle cx="128" cy="128" r="104" fill="url(#bezel)" stroke="#8b95a3" stroke-width="4"/>
+  <circle cx="128" cy="128" r="84" fill="url(#dial)" stroke="#c2ccd8" stroke-width="3"/>
+  <g stroke="#9fb0c2" stroke-width="4" stroke-linecap="round">
+    <line x1="128" y1="50" x2="128" y2="60"/>
+    <line x1="128" y1="196" x2="128" y2="206"/>
+    <line x1="50" y1="128" x2="60" y2="128"/>
+    <line x1="196" y1="128" x2="206" y2="128"/>
+    <line x1="72" y1="72" x2="79" y2="79"/>
+    <line x1="177" y1="177" x2="184" y2="184"/>
+    <line x1="184" y1="72" x2="177" y2="79"/>
+    <line x1="79" y1="177" x2="72" y2="184"/>
+  </g>
+  <polygon points="128,58 158,100 98,100" fill="#e02b20"/>
+  <polygon points="128,198 98,156 158,156" fill="#d8e6f5"/>
+  <line x1="128" y1="58" x2="128" y2="198" stroke="#5d6b7d" stroke-width="5"/>
+  <circle cx="128" cy="128" r="14" fill="url(#bezel)" stroke="#8b95a3" stroke-width="3"/>
+  <circle cx="128" cy="128" r="5" fill="#5d6b7d"/>
+</svg>

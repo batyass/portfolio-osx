@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="front" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9cc7f7"/>
+      <stop offset="0.5" stop-color="#5b97e8"/>
+      <stop offset="1" stop-color="#3f7fd0"/>
+    </linearGradient>
+    <linearGradient id="back" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7fb4ef"/>
+      <stop offset="1" stop-color="#4a86d8"/>
+    </linearGradient>
+  </defs>
+  <path d="M 34 96 L 96 96 L 96 46 L 60 46 Q 34 46 34 72 Z" fill="url(#back)" stroke="#2f6cc0" stroke-width="3"/>
+  <rect x="34" y="88" width="188" height="124" rx="16" fill="url(#front)" stroke="#2f6cc0" stroke-width="3"/>
+  <path d="M 40 120 L 96 120 L 96 88 Z" fill="url(#back)" stroke="#2f6cc0" stroke-width="3"/>
+  <path d="M 96 88 L 96 120 L 216 120 L 216 96 Q 216 88 208 88 Z" fill="url(#back)" stroke="#2f6cc0" stroke-width="3"/>
+  <path d="M 96 120 L 128 148 L 160 120" fill="none" stroke="#eaf3fd" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 216 120 L 128 148 L 40 120" fill="none" stroke="#bcd9f7" stroke-width="4" stroke-linecap="round"/>
+  <rect x="40" y="46" width="188" height="30" rx="8" fill="#ffffff" opacity="0.35"/>
+</svg>

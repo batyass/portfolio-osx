@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solva Mystery — Projet</title>
+    <link rel="stylesheet" href="../css/projects.css">
+</head>
+<body>
+    <div class="window">
+        <div class="title-bar">
+            <span><span class="title-icon">🕵️</span> Solva Mystery</span>
+            <a class="back-link" href="../index.html">← Projets</a>
+        </div>
+        <div class="content">
+            <h1>Solva Mystery</h1>
+            <p class="subtitle">Jeu d'enquête 3D propulsé par l'IA</p>
+
+            <p>
+                <strong>Solva Mystery</strong> est un jeu vidéo d'enquête 3D immersif dans lequel
+                l'intelligence artificielle génère dynamiquement les dialogues et les comportements
+                des personnages non-joueurs. Développé sous <strong>Unity 6000</strong>, le jeu
+                s'appuie sur un système de navigation (NavMesh) pour un gameplay « Point &amp; Click »
+                multi-scènes, et des dialogues verrouillés par un prompt engineering strict.
+            </p>
+
+            <h2>Technologies</h2>
+            <div class="badges">
+                <span class="badge">Unity 6000</span>
+                <span class="badge">API OpenAI (GPT-4o)</span>
+                <span class="badge">Sora</span>
+                <span class="badge">DaVinci Resolve</span>
+                <span class="badge">WebGL</span>
+            </div>
+
+            <h2>Jouer dans le navigateur</h2>
+            <p>
+                Le jeu est compilé en <strong>WebGL</strong> depuis Unity. Le build (dossier
+                <code>build/</code> généré par Unity) est chargé ci-dessous dans une fenêtre
+                plein-jeu, sans bordure, adaptée à la largeur de l'écran.
+            </p>
+
+            <div class="note note-warning">
+                ⚠️ <strong>Le chat avec les PNJ nécessite une clé API.</strong>
+                L'exploration, les déplacements et la scène fonctionnent sans configuration.
+                En revanche, <strong>poser des questions aux suspects fait appel à l'API OpenAI</strong>
+                (<code>api.openai.com</code>) et échoue si aucune clé n'est intégrée au build.
+                La clé se configure <em>côté projet Unity</em> (dans le code C# qui appelle l'API,
+                ou via le script de configuration du jeu), puis se recompile dans le build WebGL —
+                elle ne se saisit pas depuis le navigateur.
+            </div>
+
+            <!--
+              =====================================================================
+              INTÉGRATION DU BUILD WEBGL UNITY
+              ---------------------------------------------------------------------
+              1. Dans l'éditeur Unity : File → Build Settings → Platform: WebGL
+              2. Build dans CE dossier, sous le nom "build" (obtenez donc :
+                     /projects/solva-mystery/build/index.html
+                 avec les fichiers .framework.js / .wasm / .data à côté).
+              3. Le iframe ci-dessous pointe vers ce fichier. Si le build est absent,
+                 un message de repli s'affiche à la place.
+              =====================================================================
+            -->
+            <div id="game-container" style="width:100%; border:2px solid; border-color:#808080 #fff #fff #808080; background:#000;">
+                <p id="game-placeholder" style="color:#c0c0c0; text-align:center; padding:40px 20px; margin:0;">
+                    ⏳ Chargement du build WebGL…<br>
+                    <small>(si ce message persiste, le build n'est pas présent dans <code>build/</code>)</small>
+                </p>
+                <iframe
+                    id="unity-frame"
+                    src=""
+                    title="Solva Mystery — build WebGL"
+                    style="display:none; width:100%; height:70vh; min-height:420px; border:none;"
+                    allow="fullscreen; autoplay"
+                    loading="lazy"
+                ></iframe>
+            </div>
+
+            <div class="note">
+                💡 <strong>Astuce build :</strong> dans Unity, cochez <em>Compression Format → Brotli</em>
+                pour réduire le poids du fichier <code>.wasm</code>, et activez
+                <em>Code Optimization → Speed</em> pour de meilleures performances navigateur.
+            </div>
+
+            <h2>Réalisations</h2>
+            <div class="panel">
+                <ul style="margin:6px 0; padding-left:22px;">
+                    <li>Implémentation d'un système de navigation (NavMesh) pour un gameplay immersif « Point &amp; Click » et une gestion multi-scènes.</li>
+                    <li>Génération de dialogues dynamiques via un prompt engineering strict pour verrouiller les profils psychologiques des PNJ.</li>
+                    <li>Création d'un trailer promotionnel avec l'IA vidéo Sora et montage de continuité visuelle sur DaVinci Resolve.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Chemin vers le fichier index.html du build WebGL Unity.
+        const UNITY_BUILD_URL = "build/index.html";
+
+        (function loadUnityBuild() {
+            const frame = document.getElementById("unity-frame");
+            const placeholder = document.getElementById("game-placeholder");
+
+            // Vérifie que le build existe avant de charger le iframe (évite un iframe 404).
+            fetch(UNITY_BUILD_URL, { method: "HEAD" })
+                .then((res) => {
+                    if (!res.ok) throw new Error("build introuvable (HTTP " + res.status + ")");
+                    placeholder.style.display = "none";
+                    frame.src = UNITY_BUILD_URL;
+                    frame.style.display = "block";
+                })
+                .catch(() => {
+                    placeholder.innerHTML =
+                        "⚠️ Le build WebGL n'est pas encore disponible.<br><br>" +
+                        "Pour activer le jeu :<br>" +
+                        "1. Générez le build WebGL depuis l'éditeur Unity dans le dossier <code>build/</code><br>" +
+                        "2. Assurez-vous que <code>build/index.html</code> existe à côté de cette page.<br><br>" +
+                        "<small>Le reste du portfolio reste accessible via le bouton ← Projets.</small>";
+                });
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Solva Mystery</title>
+    <meta
+      name="description"
+      content="Solva Mystery - Un jeu d'enquête captivant où vous devez interroger les suspects et découvrir le coupable."
+    />
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="TemplateData/favicon.ico" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600;700&family=Raleway:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="TemplateData/style.css" />
+  </head>
+  <body>
+    <div class="page-wrapper">
+      <!-- Header -->
+      <header class="game-header">
+        <h1 class="game-title">Solva Mystery</h1>
+        <p class="game-subtitle">Enquête • Mystère • Déduction</p>
+        <p class="scroll-hint">↓ Instructions en bas de la page ↓</p>
+      </header>
+
+      <!-- Unity Game Container -->
+      <div id="unity-container" class="unity-desktop">
+        <canvas
+          id="unity-canvas"
+          width="960"
+          height="600"
+          tabindex="-1"
+        ></canvas>
+        <div id="unity-loading-bar">
+          <div id="unity-logo"></div>
+          <div id="unity-progress-bar-empty">
+            <div id="unity-progress-bar-full"></div>
+          </div>
+          <p class="loading-text">Chargement en cours...</p>
+        </div>
+        <div id="unity-warning"></div>
+        <div id="unity-footer">
+          <div id="unity-logo-title-footer"></div>
+          <div id="unity-build-title">Solva Mystery</div>
+          <div id="unity-fullscreen-button"></div>
+        </div>
+      </div>
+
+      <!-- Instructions Section -->
+      <section class="instructions-section">
+        <div class="instructions-container">
+          <!-- Divider -->
+          <div class="section-divider">
+            <span class="divider-line"></span>
+            <span class="divider-icon">🔍</span>
+            <span class="divider-line"></span>
+          </div>
+
+          <!-- Scenario Card -->
+          <article class="instruction-card">
+            <div class="card-header">
+              <span class="card-icon">📜</span>
+              <h2 class="card-title">Scénario</h2>
+            </div>
+            <div class="card-content">
+              <p>
+                Vous êtes un <span class="highlight">enquêteur</span> chargé de
+                résoudre une affaire étrange.
+              </p>
+              <p>
+                Une <span class="highlight">disparition mystérieuse</span> s'est
+                produite dans un vieux manoir abandonné. Quatre individus
+                étaient présents au moment des faits, chacun avec une
+                personnalité particulière.
+              </p>
+              <p>
+                Votre mission :
+                <span class="highlight">interroger les suspects</span>, analyser
+                leurs réponses, observer leur comportement et découvrir qui
+                ment.
+              </p>
+              <p>
+                <strong>Un seul est coupable. À vous de le démasquer.</strong>
+              </p>
+            </div>
+          </article>
+
+          <!-- How to Play Card -->
+          <article class="instruction-card">
+            <div class="card-header">
+              <span class="card-icon">🎮</span>
+              <h2 class="card-title">Comment Jouer</h2>
+            </div>
+            <div class="card-content">
+              <p><strong>Explorer et interagir</strong></p>
+              <p>
+                Pour vous déplacer, votre souris suffit ! Cliquez à l'endroit où
+                vous souhaitez vous déplacer.<br />
+                Approchez-vous d'un personnage pour ouvrir automatiquement une
+                zone de discussion. Écrivez votre question dans la zone de texte
+                et appuyez sur <span class="highlight">Entrée</span> pour
+                obtenir une réponse. Chaque suspect a sa propre personnalité et
+                réagit différemment.
+              </p>
+
+              <p style="margin-top: 25px">
+                <strong>Parler avec les suspects</strong>
+              </p>
+              <p>Vous pouvez poser des questions :</p>
+              <ul class="tips-list">
+                <li>sur leur alibi</li>
+                <li>sur ce qu'ils faisaient au moment de la disparition</li>
+                <li>sur les autres suspects</li>
+                <li>sur leur caractère</li>
+              </ul>
+              <p>
+                Soyez attentif : leurs réponses peuvent contenir des
+                <span class="highlight">indices</span> ou des
+                <span class="highlight">contradictions</span>.
+              </p>
+
+              <p style="margin-top: 25px">
+                <strong>Accuser un suspect</strong>
+              </p>
+              <p>
+                Cliquez sur l'icône <span class="highlight">loupe</span> pour
+                ouvrir le panneau des suspects. Choisissez celui que vous pensez
+                coupable.
+              </p>
+              <p>
+                Si vous choisissez le bon,
+                <span class="highlight">vous gagnez</span>. Sinon, quelqu'un
+                vous a menti...
+              </p>
+            </div>
+          </article>
+
+          <!-- Objective Card -->
+          <article class="instruction-card objective-card">
+            <div class="card-header" style="justify-content: center">
+              <span class="card-icon">🎯</span>
+              <h2 class="card-title">Objectif</h2>
+            </div>
+            <div class="card-content">
+              <p class="objective-text">
+                Utilisez votre <span class="highlight">logique</span>, votre
+                <span class="highlight">instinct</span> et les réponses des
+                suspects pour identifier le véritable coupable.
+              </p>
+              <p class="good-luck">
+                Bonne chance, détective. Le destin de cette enquête repose sur
+                vous.
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="page-footer">
+        <p>
+          <span>Yassir Bizguirne</span> & <span>Mohamed Tahiri</span> — UTC —
+          SI28 A25
+        </p>
+      </footer>
+    </div>
+
+    <script>
+      var canvas = document.querySelector("#unity-canvas");
+
+      // Shows a temporary message banner/ribbon for a few seconds, or
+      // a permanent error message on top of the canvas if type=='error'.
+      function unityShowBanner(msg, type) {
+        var warningBanner = document.querySelector("#unity-warning");
+        function updateBannerVisibility() {
+          warningBanner.style.display = warningBanner.children.length
+            ? "block"
+            : "none";
+        }
+        var div = document.createElement("div");
+        div.innerHTML = msg;
+        warningBanner.appendChild(div);
+        if (type == "error")
+          div.style = "background: #c0392b; padding: 10px; border-radius: 4px;";
+        else {
+          if (type == "warning")
+            div.style =
+              "background: #c9a227; color: #000; padding: 10px; border-radius: 4px;";
+          setTimeout(function () {
+            warningBanner.removeChild(div);
+            updateBannerVisibility();
+          }, 5000);
+        }
+        updateBannerVisibility();
+      }
+
+      var buildUrl = "Build";
+      var loaderUrl = buildUrl + "/MysteryGame.loader.js";
+      var config = {
+        arguments: [],
+        dataUrl: buildUrl + "/MysteryGame.data",
+        frameworkUrl: buildUrl + "/MysteryGame.framework.js",
+        codeUrl: buildUrl + "/MysteryGame.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "Solva Mystery",
+        productVersion: "1.0",
+        showBanner: unityShowBanner,
+      };
+
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        // Mobile device style: fill the whole browser client area with the game canvas:
+        var meta = document.createElement("meta");
+        meta.name = "viewport";
+        meta.content =
+          "width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes";
+        document.getElementsByTagName("head")[0].appendChild(meta);
+        document.querySelector("#unity-container").className = "unity-mobile";
+        canvas.className = "unity-mobile";
+
+        // Hide page content on mobile, show only game
+        document.querySelector(".page-wrapper").style.padding = "0";
+        document.querySelector(".game-header").style.display = "none";
+        document.querySelector(".instructions-section").style.display = "none";
+        document.querySelector(".page-footer").style.display = "none";
+      } else {
+        // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
+        canvas.style.width = "960px";
+        canvas.style.height = "600px";
+      }
+
+      document.querySelector("#unity-loading-bar").style.display = "block";
+
+      var script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          document.querySelector("#unity-progress-bar-full").style.width =
+            100 * progress + "%";
+        })
+          .then((unityInstance) => {
+            document.querySelector("#unity-loading-bar").style.display = "none";
+            document.querySelector("#unity-fullscreen-button").onclick = () => {
+              unityInstance.SetFullscreen(1);
+            };
+          })
+          .catch((message) => {
+            alert(message);
+          });
+      };
+
+      document.body.appendChild(script);
+    </script>
+  </body>
+</html>

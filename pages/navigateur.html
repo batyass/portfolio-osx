@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../css/navigateur.css">
+</head>
+<body>
+
+    <div class="nav-bar">
+        <button class="nav-btn" onclick="goHome()" title="Accueil">⌂</button>
+        <button class="nav-btn" onclick="goBack()" title="Précédent">‹</button>
+        <button class="nav-btn" onclick="goForward()" title="Suivant">›</button>
+        <div class="address-wrap">
+            <span class="lock">🔒</span>
+            <input type="text" class="address-bar" id="url-input" value="https://search.marginalia.nu/">
+        </div>
+        <button class="go-btn" onclick="navigate()">Go</button>
+    </div>
+
+    <iframe id="web-frame" src="https://search.marginalia.nu/"></iframe>
+
+    <script>
+        const HOME = "https://search.marginalia.nu/";
+        const initialUrl = new URLSearchParams(location.search).get("url") || HOME;
+
+        const input = document.getElementById("url-input");
+        const frame = document.getElementById("web-frame");
+        input.value = initialUrl;
+        frame.src = initialUrl;
+
+        function goHome() {
+            input.value = HOME;
+            frame.src = HOME;
+        }
+
+        function goBack() {
+            try {
+                frame.contentWindow.history.back();
+            } catch {
+                frame.src = input.value;
+            }
+        }
+
+        function goForward() {
+            try {
+                frame.contentWindow.history.forward();
+            } catch {
+                frame.src = input.value;
+            }
+        }
+
+        function navigate() {
+            const url = input.value;
+            const target = url.startsWith("http") ? url : "https://" + url;
+            input.value = target;
+            frame.src = target;
+        }
+
+        input.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                navigate();
+            }
+        });
+    </script>
+</body>
+</html>

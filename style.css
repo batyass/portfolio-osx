@@ -1,0 +1,652 @@
+/* ============================================================
+   Portfolio — Thème Mac OS X (Leopard / Tiger)
+   ============================================================ */
+
+:root {
+    --menubar-h: 26px;
+    --dock-h: 68px;
+    --tl-red: #ff5f57;
+    --tl-red-border: #e0443e;
+    --tl-yellow: #ffbd2e;
+    --tl-yellow-border: #dea123;
+    --tl-green: #28c840;
+    --tl-green-border: #1aab29;
+    --os-font: "Lucida Grande", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    font-family: var(--os-font);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+body {
+    background-color: #0a0e1a;
+}
+
+body img {
+    pointer-events: none;
+    user-select: none;
+}
+
+/* ============================================================
+   Écran de démarrage (boot) façon Mac
+   ============================================================ */
+#loader-wrapper {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 34px;
+    background: radial-gradient(120% 120% at 50% 30%, #3d4045 0%, #26282c 45%, #141519 100%);
+    transition: opacity 0.9s ease;
+}
+
+.loader-hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.boot-logo {
+    width: 110px;
+    height: auto;
+    opacity: 0.92;
+    animation: boot-pulse 1.6s ease-in-out infinite;
+    filter: drop-shadow(0 2px 14px rgba(255, 255, 255, 0.12));
+}
+
+@keyframes boot-pulse {
+    0%, 100% { opacity: 0.85; }
+    50% { opacity: 1; }
+}
+
+.boot-progress {
+    width: 200px;
+    height: 6px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.16);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+}
+
+.boot-progress-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #6fa8f2, #9cc7f7);
+    box-shadow: 0 0 10px rgba(111, 168, 242, 0.9);
+    transition: width 0.25s ease;
+}
+
+.boot-text {
+    position: absolute;
+    bottom: 42px;
+    margin: 0;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.55);
+    letter-spacing: 0.4px;
+}
+
+/* ============================================================
+   Barre de menus macOS
+   ============================================================ */
+.menubar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--menubar-h);
+    z-index: 5000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 12px;
+    font-size: 13px;
+    color: #111;
+    background: rgba(232, 236, 242, 0.72);
+    -webkit-backdrop-filter: blur(18px) saturate(1.6);
+    backdrop-filter: blur(18px) saturate(1.6);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.28);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
+    user-select: none;
+}
+
+.menu-left, .menu-right {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    height: 100%;
+}
+
+.menu-apple {
+    display: flex;
+    align-items: center;
+    padding: 0 8px 0 4px;
+    height: 100%;
+    cursor: default;
+}
+
+.menu-apple img {
+    width: 16px;
+    height: 16px;
+    filter: brightness(0); /* banane noire dans la barre de menus */
+    opacity: 0.9;
+}
+
+.menu-item {
+    padding: 0 9px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    border-radius: 4px;
+    cursor: default;
+}
+
+.menu-item:hover {
+    background: rgba(0, 0, 0, 0.08);
+}
+
+.menu-status {
+    display: flex;
+    align-items: center;
+    padding: 0 7px;
+    height: 100%;
+    cursor: default;
+    font-variant-numeric: tabular-nums;
+}
+
+.menu-clock {
+    font-weight: 600;
+    padding-left: 9px;
+}
+
+.menu-date {
+    opacity: 0.75;
+}
+
+/* ============================================================
+   Bureau + fond d'écran
+   ============================================================ */
+.desktop {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    gap: 8px;
+    padding: calc(var(--menubar-h) + 16px) 18px calc(var(--dock-h) + 42px);
+    background: url("./assets/wallpaper.svg") center / cover no-repeat #0a0e1a;
+}
+
+/* Grille invisible (gère drag & drop des icônes) */
+.grid-cell {
+    width: 126px;
+    height: 148px;
+    border: 1px dashed transparent;
+    transition: background-color 0.15s, border-color 0.15s;
+}
+
+.grid-cell.drag-over {
+    background-color: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.45);
+    border-radius: 10px;
+}
+
+/* ============================================================
+   Icônes du bureau (style Mac)
+   ============================================================ */
+.desktop-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding-top: 8px;
+    user-select: none;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.12s, transform 0.12s;
+}
+
+.desktop-icon:hover {
+    transform: translateY(-1px);
+}
+
+.desktop-icon.selected,
+#desktop .desktop-icon:hover {
+    background: rgba(60, 132, 245, 0.45);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.55) inset, 0 2px 10px rgba(0, 0, 0, 0.25);
+}
+
+.desktop-icon .icon-img img {
+    width: 68px;
+    height: 68px;
+    filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.45));
+    transition: transform 0.12s;
+}
+
+.desktop-icon:hover .icon-img img {
+    transform: scale(1.06);
+}
+
+.desktop-icon .icon-label {
+    margin-top: 7px;
+    font-size: 12px;
+    line-height: 1.25;
+    text-align: center;
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 2px rgba(0, 0, 0, 0.7);
+    word-wrap: break-word;
+    max-width: 100%;
+}
+
+/* ============================================================
+   Dock macOS
+   ============================================================ */
+/* Zone plein écran qui centre le dock (sans transform, pour que les
+   positions offsetLeft des icônes coïncident avec le référentiel visuel) */
+.dock-zone {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 4000;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.dock {
+    pointer-events: auto;
+    height: calc(var(--dock-h) + 10px);
+    display: flex;
+    align-items: center; /* icônes centrées verticalement dans le verre */
+    padding: 8px 10px 8px;
+    border-radius: 16px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.34) 0%, rgba(255, 255, 255, 0.14) 55%, rgba(0, 0, 0, 0.18) 100%);
+    -webkit-backdrop-filter: blur(22px) saturate(1.7);
+    backdrop-filter: blur(22px) saturate(1.7);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.65);
+    max-width: 96vw;
+    overflow: visible; /* les icônes agrandies restent visibles hors du verre */
+}
+
+.dock-icons {
+    position: relative; /* repère pour le calcul de magnification */
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    overflow: visible;
+}
+
+.dock-icon {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    padding: 0 4px;
+    transition: transform 0.1s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+
+/* Les imgs du dock redeviennent interactives (hover/click sur toute la zone agrandie) */
+.dock-icons img {
+    pointer-events: auto;
+}
+
+.dock-icon img {
+    width: 46px;
+    height: 46px;
+    transform-origin: bottom center; /* grandit vers le haut, depuis la tablette */
+    transition: transform 0.1s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.4));
+}
+
+/* Reflet discret sous chaque icône */
+.dock-icon::after {
+    content: "";
+    position: absolute;
+    bottom: -7px;
+    width: 70%;
+    height: 6px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.45) 0%, transparent 70%);
+    transition: opacity 0.14s;
+}
+
+/* Indicateur d'app ouverte */
+.dock-icon .indicator {
+    position: absolute;
+    bottom: -10px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 3px rgba(255, 255, 255, 0.9);
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.dock-icon.running .indicator {
+    opacity: 1;
+}
+
+/* Info-bulle au survol — dégagée au-dessus de l'icône même agrandie (max 71px) */
+.dock-icon .tooltip {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    background: rgba(40, 42, 48, 0.94);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    font-size: 12px;
+    padding: 4px 11px;
+    border-radius: 6px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.12s ease 0.25s, transform 0.12s ease 0.25s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+.dock-icon:hover .tooltip {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Séparateur (apps / corbeille) */
+.dock-separator {
+    width: 1px;
+    align-self: stretch;
+    margin: 4px 6px;
+    background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.35), transparent);
+    border-left: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Tuiles des fenêtres minimisées */
+.dock-mini {
+    width: 42px;
+    height: 42px;
+    border-radius: 9px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dock-mini img {
+    width: 30px;
+    height: 30px;
+}
+
+/* ============================================================
+   Fenêtres OS (chrome aqua)
+   ============================================================ */
+.os-window {
+    position: absolute;
+    top: 90px;
+    left: 120px;
+    width: 680px;
+    height: 460px;
+    min-width: 320px;
+    min-height: 220px;
+    border-radius: 11px;
+    background: rgba(244, 246, 249, 0.92);
+    -webkit-backdrop-filter: blur(24px) saturate(1.5);
+    backdrop-filter: blur(24px) saturate(1.5);
+    border: 1px solid rgba(255, 255, 255, 0.65);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25), 0 18px 50px rgba(0, 0, 0, 0.45), 0 4px 14px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    resize: both;
+    animation: win-appear 0.22s cubic-bezier(0.2, 0.9, 0.3, 1.1);
+}
+
+@keyframes win-appear {
+    from { opacity: 0; transform: scale(0.92) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.window-header {
+    position: relative;
+    height: 26px;
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to bottom, #eef0f4 0%, #e0e3e9 45%, #d3d7de 100%);
+    border-bottom: 1px solid #aeb4bd;
+    border-radius: 11px 11px 0 0;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    cursor: grab;
+    user-select: none;
+}
+
+.window-header:active {
+    cursor: grabbing;
+}
+
+.window-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 60%;
+}
+
+/* Boutons de traffic light (à gauche, façon macOS) */
+.window-controls {
+    position: absolute;
+    left: 10px;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tl-btn {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    padding: 0;
+    cursor: pointer;
+    position: relative;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.55), 0 1px 2px rgba(0, 0, 0, 0.3);
+    transition: filter 0.1s;
+}
+
+.tl-btn:hover {
+    filter: brightness(1.08);
+}
+
+.tl-red { background: radial-gradient(circle at 35% 32%, #ff8f87, var(--tl-red) 55%, #e0443e); }
+.tl-yellow { background: radial-gradient(circle at 35% 32%, #ffd868, var(--tl-yellow) 55%, #dea123); }
+.tl-green { background: radial-gradient(circle at 35% 32%, #7ae08a, var(--tl-green) 55%, #1aab29); }
+
+.tl-btn svg {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 9px;
+    height: 9px;
+    opacity: 0;
+    transition: opacity 0.1s;
+}
+
+.window-controls:hover .tl-btn svg {
+    opacity: 1;
+}
+
+.window-content {
+    flex-grow: 1;
+    width: 100%;
+    border: none;
+    background: #fff;
+    border-radius: 0 0 11px 11px;
+}
+
+.os-window.is-interacting .window-content {
+    pointer-events: none;
+}
+
+.os-window.is-maximized {
+    top: var(--menubar-h) !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: calc(100vh - var(--menubar-h)) !important;
+    border-radius: 0;
+    resize: none;
+}
+
+.os-window.is-maximized .window-header,
+.os-window.is-maximized .window-content {
+    border-radius: 0;
+}
+
+.os-window.is-minimized {
+    display: none !important;
+}
+
+.os-window.is-focused .window-header {
+    background: linear-gradient(to bottom, #f4f6fa 0%, #e4e7ee 45%, #d5d9e0 100%);
+}
+
+/* ============================================================
+   Contenu des dossiers
+   ============================================================ */
+.folder-content {
+    flex-grow: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(108px, 1fr));
+    grid-auto-rows: min-content;
+    gap: 12px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.85);
+    overflow-y: auto;
+}
+
+.folder-content .desktop-icon .icon-img img {
+    width: 60px;
+    height: 60px;
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.25));
+}
+
+.folder-content .desktop-icon .icon-label {
+    color: #222;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+    font-size: 12px;
+}
+
+.folder-content .desktop-icon:hover,
+.folder-content .desktop-icon.selected {
+    background: rgba(60, 132, 245, 0.18);
+    box-shadow: 0 0 0 2px rgba(60, 132, 245, 0.4) inset;
+}
+
+/* ============================================================
+   Terminal intégré
+   ============================================================ */
+.terminal-window {
+    flex-grow: 1;
+    background: #101216;
+    color: #e8e8e8;
+    font-family: Menlo, Consolas, "DejaVu Sans Mono", monospace;
+    font-size: 13px;
+    line-height: 1.55;
+    padding: 12px 14px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.terminal-window .term-out {
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.term-prompt {
+    color: #5fd35f;
+    font-weight: bold;
+}
+
+.term-cmd {
+    color: #fff;
+}
+
+.term-inline {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 2px;
+}
+
+.term-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-family: inherit;
+    font-size: 13px;
+    caret-color: #5fd35f;
+}
+
+.dock-icon.dock-bounce img {
+    animation: dock-bounce 0.4s ease;
+}
+
+@keyframes dock-bounce {
+    0%, 100% { transform: translateY(0); }
+    35% { transform: translateY(-10px); }
+    70% { transform: translateY(-3px); }
+}
+
+/* Respecte prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+    .boot-logo {
+        animation: none;
+    }
+    .dock-icon,
+    .dock-icon img,
+    .desktop-icon,
+    .os-window {
+        transition: none;
+    }
+}
+
+/* Barre de défilement discrète */
+::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.28);
+    border-radius: 5px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}

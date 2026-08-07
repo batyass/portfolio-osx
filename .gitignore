@@ -1,0 +1,16 @@
+# Outils internes (Freebuff / agents)
+.freebuff/
+.agents/
+skills-lock.json
+
+# Bases de données locales
+*.db
+*.db-wal
+*.db-shm
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs / temp
+*.log

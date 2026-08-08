@@ -128,3 +128,13 @@ a:hover {
     width: 26px;
     text-align: center;
 }
+
+/* ---- Petit écran ---- */
+@media (max-width: 680px) {
+    .content {
+        padding: 14px 14px 20px;
+    }
+    h1 {
+        font-size: 20px;
+    }
+}

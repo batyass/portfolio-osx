@@ -67,19 +67,33 @@ function openExternal(url) {
 function nextWindowPosition() {
     openCounter.n += 1;
     const off = ((openCounter.n - 1) % 6) * 30;
-    return { top: 64 + off, left: 100 + off };
+    const top = 64 + off;
+    const left = 100 + off;
+    // Clamp au viewport selon la taille réelle de la fenêtre (mobile ≠ desktop)
+    const defW = window.innerWidth < 680 ? window.innerWidth - 14 : 680;
+    const defH = window.innerWidth < 680 ? Math.round(window.innerHeight * 0.55) : 460;
+    const maxLeft = Math.max(8, window.innerWidth - defW - 8);
+    const maxTop = Math.max(8, window.innerHeight - defH - 40);
+    return { top: Math.min(top, maxTop), left: Math.min(left, maxLeft) };
 }
 
 // ---------- Ouverture / focus des fenêtres ----------
 function openAppWindow(title, url, opts = {}) {
-    if (openWindows.has(title)) {
-        const win = openWindows.get(title);
-        if (win.isMinimized) {
-            win.restoreWindow();
+    const existing = openWindows.get(title);
+    if (existing) {
+        // Si la fenêtre a été retirée du DOM sans passer par closeWindow()
+        // (état orphelin), on nettoie puis on la recrée proprement.
+        if (!existing.windowElement || !existing.windowElement.isConnected) {
+            openWindows.delete(title);
+            existing.removeMiniTile();
+            existing.markDockRunning(false);
+        } else if (existing.isMinimized) {
+            existing.restoreWindow();
+            return;
         } else {
-            win.focusWindow();
+            existing.focusWindow();
+            return;
         }
-        return;
     }
     new WindowApp(title, url, opts);
 }
@@ -111,22 +125,119 @@ function attachIconDrag(icon) {
     });
 }
 
-function createDesktopIcon(source, name, url, onOpen) {
+// Drag tactile des icônes du bureau (HTML5 DnD ne fonctionne pas au toucher)
+function attachTouchDrag(icon) {
+    let startX = 0;
+    let startY = 0;
+    let dragging = false;
+
+    const clearDropHighlights = () => {
+        document.querySelectorAll(".grid-cell.drag-over").forEach((c) => c.classList.remove("drag-over"));
+    };
+
+    const highlightCellAt = (x, y) => {
+        clearDropHighlights();
+        const el = document.elementFromPoint(x, y);
+        const cell = el && el.closest(".grid-cell");
+        if (cell && !cell.querySelector(".desktop-icon")) {
+            cell.classList.add("drag-over");
+        }
+    };
+
+    icon.addEventListener("pointerdown", (event) => {
+        if (event.pointerType !== "touch") {
+            return;
+        }
+        startX = event.clientX;
+        startY = event.clientY;
+        dragging = false;
+        icon._suppressClick = false;
+        try {
+            icon.setPointerCapture(event.pointerId);
+        } catch { /* ignore */ }
+    });
+
+    icon.addEventListener("pointermove", (event) => {
+        if (event.pointerType !== "touch") {
+            return;
+        }
+        const dx = event.clientX - startX;
+        const dy = event.clientY - startY;
+        if (!dragging && Math.hypot(dx, dy) > 12) {
+            dragging = true;
+            icon.classList.add("icon-dragging");
+        }
+        if (dragging) {
+            icon.style.transform = `translate(${dx}px, ${dy}px)`;
+            highlightCellAt(event.clientX, event.clientY);
+        }
+    });
+
+    icon.addEventListener("pointerup", (event) => {
+        if (event.pointerType !== "touch") {
+            return;
+        }
+        if (dragging) {
+            icon._suppressClick = true;
+            setTimeout(() => {
+                icon._suppressClick = false;
+            }, 60);
+            icon.classList.remove("icon-dragging");
+            icon.style.transform = "";
+            const el = document.elementFromPoint(event.clientX, event.clientY);
+            const cell = el && el.closest(".grid-cell");
+            if (cell && cell !== icon.parentElement && !cell.querySelector(".desktop-icon")) {
+                cell.appendChild(icon);
+            }
+            clearDropHighlights();
+        }
+        dragging = false;
+    });
+
+    icon.addEventListener("pointercancel", () => {
+        if (dragging) {
+            icon.classList.remove("icon-dragging");
+            icon.style.transform = "";
+            clearDropHighlights();
+        }
+        dragging = false;
+    });
+}
+
+function createDesktopIcon(source, name, url, onOpen, opts = {}) {
     const icon = document.createElement("div");
     icon.className = "desktop-icon";
-    icon.draggable = true;
+
+    const isTouch = window.matchMedia("(pointer: coarse)").matches;
+    icon.draggable = !isTouch; /* sur tactile : drag par pointer events (pas de DnD natif) */
+
     icon.innerHTML = `
         <div class="icon-img"><img src="${source}" alt="${name}"></div>
         <span class="icon-label">${name}</span>
     `;
 
-    icon.addEventListener("dblclick", () => {
+    const openAction = () => {
         if (onOpen) {
             onOpen();
             return;
         }
         openAppWindow(name, url, { icon: source });
-    });
+    };
+
+    icon.addEventListener("dblclick", openAction);
+
+    // Sur tactile : un simple tap ouvre l'app (pas de double-clic)
+    if (isTouch) {
+        icon.addEventListener("click", () => {
+            if (icon._suppressClick) {
+                return;
+            }
+            openAction();
+        });
+        if (opts.drag) {
+            attachTouchDrag(icon);
+        }
+    }
 
     icon.addEventListener("mousedown", (event) => {
         event.stopPropagation();
@@ -134,7 +245,9 @@ function createDesktopIcon(source, name, url, onOpen) {
         icon.classList.add("selected");
     });
 
-    attachIconDrag(icon);
+    if (!isTouch) {
+        attachIconDrag(icon);
+    }
     return icon;
 }
 
@@ -218,10 +331,6 @@ function setupDockMagnify() {
     const dock = document.getElementById("dock");
     const row = document.getElementById("dock-icons");
 
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        return;
-    }
-
     const RANGE = 150; // distance (px) sur laquelle la magnification agit
     const MAX_SCALE = 1.55;
 
@@ -292,9 +401,22 @@ function setupDockMagnify() {
         });
     };
 
+    // La magnification s'active/désactive en direct, à chaque mouvement de
+    // souris : désactivée au toucher, sur petit écran (dock scrollable) ou
+    // avec prefers-reduced-motion. Aucune dépendance aux événements
+    // resize/matchMedia (fiabilité maximale, y compris rotation d'écran).
+    const shouldEnable = () =>
+        !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        && !window.matchMedia("(pointer: coarse)").matches
+        && window.innerWidth >= 680;
+
     // Zone de survol étendue au-dessus du dock : les icônes se réinitialisent
     // seulement quand le curseur quitte vraiment la zone (pas de clignotement).
-    document.addEventListener("mousemove", (event) => {
+    const onMouseMove = (event) => {
+        if (!shouldEnable()) {
+            resetTransforms();
+            return;
+        }
         const dockRect = dock.getBoundingClientRect();
         const inBand = event.clientY >= dockRect.top - 60 && event.clientY <= dockRect.bottom + 12;
         if (!inBand) {
@@ -303,7 +425,9 @@ function setupDockMagnify() {
         }
         applyMagnify(event.clientX);
         transformed = true;
-    });
+    };
+
+    document.addEventListener("mousemove", onMouseMove);
 }
 
 // ---------- Fenêtre OS ----------
@@ -450,8 +574,6 @@ class WindowApp {
     }
 
     closeWindow() {
-        document.removeEventListener("mousemove", this.onMouseMove);
-        document.removeEventListener("mouseup", this.onMouseUp);
         this.windowElement.remove();
         this.removeMiniTile();
         this.markDockRunning(false);
@@ -464,20 +586,21 @@ class WindowApp {
         const minimizeBtn = this.windowElement.querySelector(".tl-yellow");
         const maximizeBtn = this.windowElement.querySelector(".tl-green");
 
-        this.windowElement.addEventListener("mousedown", () => this.focusWindow());
+        // Focus au pointerdown (souris + tactile)
+        this.windowElement.addEventListener("pointerdown", () => this.focusWindow());
 
         let isDragging = false;
         let offsetX = 0;
         let offsetY = 0;
 
-        this.onMouseMove = (event) => {
+        const onPointerMove = (event) => {
             if (!isDragging) {
                 return;
             }
             this.windowElement.style.left = `${event.clientX - offsetX}px`;
             this.windowElement.style.top = `${event.clientY - offsetY}px`;
         };
-        this.onMouseUp = () => {
+        const endDrag = () => {
             if (!isDragging) {
                 return;
             }
@@ -485,8 +608,9 @@ class WindowApp {
             this.windowElement.classList.remove("is-interacting");
         };
 
-        document.addEventListener("mousemove", this.onMouseMove);
-        document.addEventListener("mouseup", this.onMouseUp);
+        header.addEventListener("pointermove", onPointerMove);
+        header.addEventListener("pointerup", endDrag);
+        header.addEventListener("pointercancel", endDrag);
 
         closeBtn.addEventListener("click", (event) => {
             event.stopPropagation();
@@ -504,7 +628,8 @@ class WindowApp {
         });
         header.addEventListener("dblclick", () => this.toggleMaximize());
 
-        header.addEventListener("mousedown", (event) => {
+        // Drag de la fenêtre par la barre de titre (souris ET doigt)
+        header.addEventListener("pointerdown", (event) => {
             if (this.isMaximized || event.target.closest(".tl-btn")) {
                 return;
             }
@@ -512,6 +637,9 @@ class WindowApp {
             offsetX = event.clientX - this.windowElement.getBoundingClientRect().left;
             offsetY = event.clientY - this.windowElement.getBoundingClientRect().top;
             this.windowElement.classList.add("is-interacting");
+            try {
+                header.setPointerCapture(event.pointerId);
+            } catch { /* ignore */ }
         });
     }
 
@@ -615,6 +743,7 @@ class WindowApp {
 
         setTimeout(() => input.focus(), 150);
         body.addEventListener("mousedown", () => input.focus());
+        body.addEventListener("pointerdown", () => input.focus());
     }
 }
 
@@ -622,9 +751,19 @@ class WindowApp {
 class DesktopEnvironment {
     constructor(containerId) {
         this.desktop = document.getElementById(containerId);
-        this.cellW = 126;
-        this.cellH = 148;
+        this.applyCellSize();
         this.init();
+    }
+
+    applyCellSize() {
+        // Cellules plus compactes sur petit écran pour que le bureau tienne à l'écran
+        if (window.innerWidth < 640) {
+            this.cellW = 104;
+            this.cellH = 122;
+        } else {
+            this.cellW = 126;
+            this.cellH = 148;
+        }
     }
 
     init() {
@@ -634,23 +773,44 @@ class DesktopEnvironment {
         this.desktop.addEventListener("mousedown", () => {
             document.querySelectorAll(".desktop-icon.selected").forEach((el) => el.classList.remove("selected"));
         });
-        window.addEventListener("resize", () => this.generateGrid(true));
+        window.addEventListener("resize", () => {
+            this.applyCellSize();
+            this.generateGrid(true);
+        });
     }
 
     generateGrid(isResize = false) {
         const safety = 18;
-        const cols = Math.max(5, Math.floor((window.innerWidth - safety) / this.cellW) - 1);
-        const rows = Math.max(2, Math.floor((window.innerHeight - 160) / this.cellH) - 1);
+        const minCols = window.innerWidth < 480 ? 3 : 5;
+        const cols = Math.max(minCols, Math.floor((window.innerWidth - safety) / this.cellW) - 1);
+        // Sur petit écran, 3 lignes minimum pour que les 7 icônes du bureau tiennent
+        const minRows = window.innerWidth < 480 ? 3 : 2;
+        const rows = Math.max(minRows, Math.floor((window.innerHeight - 160) / this.cellH) - 1);
 
+        this.desktop.style.setProperty("--cell-w", `${this.cellW}px`);
+        this.desktop.style.setProperty("--cell-h", `${this.cellH}px`);
         this.desktop.style.gridTemplateColumns = `repeat(${cols}, ${this.cellW}px)`;
         this.desktop.style.gridTemplateRows = `repeat(${rows}, ${this.cellH}px)`;
 
         if (isResize) {
+            // Au redimensionnement : on ajoute seulement les cellules manquantes
+            // (sans détruire les icônes déjà placées).
+            this.ensureCellCount(cols, rows);
             return;
         }
 
         this.desktop.innerHTML = "";
         for (let index = 0; index < cols * rows; index += 1) {
+            const cell = document.createElement("div");
+            cell.classList.add("grid-cell");
+            this.desktop.appendChild(cell);
+        }
+    }
+
+    ensureCellCount(cols, rows) {
+        const needed = cols * rows;
+        const current = this.desktop.querySelectorAll(".grid-cell").length;
+        for (let index = current; index < needed; index += 1) {
             const cell = document.createElement("div");
             cell.classList.add("grid-cell");
             this.desktop.appendChild(cell);
@@ -675,12 +835,18 @@ class DesktopEnvironment {
 
     addIcon(cellIndex, icon, name, url, onOpen, external) {
         const cells = this.desktop.querySelectorAll(".grid-cell");
-        if (!cells[cellIndex] || cells[cellIndex].hasChildNodes()) {
+        // Si la cellule ciblée n'existe pas (écran étroit) ou est occupée,
+        // on place l'icône dans la première cellule libre.
+        let target = cells[cellIndex];
+        if (!target || target.hasChildNodes()) {
+            target = [...cells].find((cell) => !cell.hasChildNodes());
+        }
+        if (!target) {
             return;
         }
 
-        const iconEl = createDesktopIcon(icon, name, url, onOpen || (external ? () => openExternal(external) : undefined));
-        cells[cellIndex].appendChild(iconEl);
+        const iconEl = createDesktopIcon(icon, name, url, onOpen || (external ? () => openExternal(external) : undefined), { drag: true });
+        target.appendChild(iconEl);
     }
 
     setupDragAndDrop() {

@@ -102,3 +102,23 @@ iframe {
     border: none;
     background: #fff;
 }
+
+/* ---- Petit écran ---- */
+@media (max-width: 680px) {
+    .nav-bar {
+        gap: 5px;
+        padding: 6px 8px;
+    }
+    .nav-btn {
+        width: 30px;
+        height: 30px;
+        touch-action: manipulation;
+    }
+    .go-btn {
+        padding: 6px 12px;
+        touch-action: manipulation;
+    }
+    .address-wrap {
+        padding: 4px 10px;
+    }
+}

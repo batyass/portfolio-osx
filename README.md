@@ -1,5 +1,7 @@
 # 🖥️ Portfolio — Bureau Mac OS X (Leopard)
 
+> 🌐 **En ligne :** https://batyass.github.io/portfolio-osx/
+
 Un portfolio interactif présenté comme un **vrai bureau Mac OS X** : fond d'écran aurora façon Leopard, barre de menus translucide, dock avec magnification, fenêtres à « traffic lights », écran de démarrage animé… et même un terminal fonctionnel.
 
 ## ✨ Fonctionnalités

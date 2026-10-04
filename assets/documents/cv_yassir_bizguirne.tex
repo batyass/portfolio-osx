@@ -7,12 +7,12 @@
 % ---------------------- Packages ---------------------------
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage[a4paper,left=1.2cm,right=1.2cm,top=0.9cm,bottom=0.9cm]{geometry}
+\usepackage[a4paper,left=1.2cm,right=1.2cm,top=0.85cm,bottom=0.85cm]{geometry}
 \usepackage{xcolor}
 \usepackage{titlesec}
 \usepackage{enumitem}
 \usepackage[hidelinks]{hyperref}
-\renewcommand{\baselinestretch}{0.98}
+\renewcommand{\baselinestretch}{0.97}
 
 % ----------------------- Couleurs --------------------------
 \definecolor{cvblue}{RGB}{22,78,140}
@@ -21,15 +21,15 @@
 % ----------------------- Mise en page ----------------------
 \pagestyle{empty}
 \setlength{\parindent}{0pt}
-\setlist[itemize]{leftmargin=1.25em,itemsep=1.8pt,parsep=0pt,topsep=1.5pt,partopsep=0pt}
+\setlist[itemize]{leftmargin=1.25em,itemsep=1.2pt,parsep=0pt,topsep=1.2pt,partopsep=0pt}
 \renewcommand{\labelitemi}{\textcolor{cvblue}{\raisebox{0.2ex}{\scriptsize$\bullet$}}}
 
 % ------------------- Style des sections --------------------
 \titleformat{\section}
   {\normalfont\large\bfseries\color{cvblue}}
   {}{0em}{}
-  [\vspace{0.1em}{\color{cvblue}\titlerule[1.1pt]}]
-\titlespacing{\section}{0pt}{0.75em}{0.35em}
+  [\vspace{0.08em}{\color{cvblue}\titlerule[1.1pt]}]
+\titlespacing{\section}{0pt}{0.65em}{0.3em}
 
 % Entrée "Titre à gauche : date à droite"
 \newcommand{\entry}[2]{%
@@ -43,9 +43,9 @@
 
 % ========================= EN-TÊTE =========================
 \begin{center}
-  {\LARGE\bfseries Yassir BIZGUIRNE}\\[0.2em]
-  {\large\color{cvblue}\bfseries Stage Ingénieur / Assistant Ingénieur : Informatique \& Data Science}\\[0.15em]
-  {\normalsize Étudiant Ingénieur à l'Université de Technologie de Compiègne (UTC)}\\[0.35em]
+  {\LARGE\bfseries Yassir BIZGUIRNE}\\[0.18em]
+  {\large\color{cvblue}\bfseries Stage Ingénieur / Assistant Ingénieur : Informatique \& Data Science}\\[0.12em]
+  {\normalsize Étudiant Ingénieur à l'Université de Technologie de Compiègne (UTC)}\\[0.3em]
   {\small 
     \href{tel:+33744800846}{\textbf{+33 7 44 80 08 46}} 
     \textbullet\ \href{mailto:yassir.bizguirne@etu.utc.fr}{\textbf{yassir.bizguirne@etu.utc.fr}} 
@@ -55,7 +55,7 @@
   }
 \end{center}
 
-\vspace{0.15em}
+\vspace{0.1em}
 \noindent{\small\textit{Élève ingénieur passionné par le \textbf{développement logiciel}, l'\textbf{IA générative} et l'\textbf{optimisation des processus}. Combine un solide socle technique (\textbf{backend}, \textbf{bases de données}, \textbf{C++}, \textbf{Python}) avec une expérience industrielle concrète et réussie chez \textbf{ZEISS}.}}
 
 % ======================== FORMATIONS ========================
@@ -133,8 +133,9 @@
 % ====================== CENTRES D'INTÉRÊT ===================
 \section{Centres d'intérêt}
 \begin{itemize}
-  \item \textbf{Sport} : Musculation / entraînement en force, course à pied, basketball.
-  \item \textbf{Tech \& Création} : Développement de jeux vidéo (Godot, Unity), émulation et veille active sur l'IA générative.
+  \item \textbf{Sport} : Course à pied, basketball, salle de sport et entraînement en force.
+  \item \textbf{Culture \& Lecture} : Lecture de tous types d'ouvrages, veille technologique et scientifique.
+  \item \textbf{Création numérique} : Développement de jeux vidéo indépendants, modélisation et projets open source.
 \end{itemize}
 
 \end{document}

@@ -1,18 +1,18 @@
 % !TEX program = pdflatex
 % ============================================================
-%  CV : Yassir BIZGUIRNE (Format 1 Page Strict)
+%  CV : Yassir BIZGUIRNE
 % ============================================================
-\documentclass[9.5pt,a4paper]{article}
+\documentclass[10pt,a4paper]{article}
 
 % ---------------------- Packages ---------------------------
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage[a4paper,left=1.1cm,right=1.1cm,top=0.6cm,bottom=0.6cm]{geometry}
+\usepackage[a4paper,left=1.2cm,right=1.2cm,top=0.9cm,bottom=0.9cm]{geometry}
 \usepackage{xcolor}
 \usepackage{titlesec}
 \usepackage{enumitem}
 \usepackage[hidelinks]{hyperref}
-\renewcommand{\baselinestretch}{0.92}
+\renewcommand{\baselinestretch}{0.98}
 
 % ----------------------- Couleurs --------------------------
 \definecolor{cvblue}{RGB}{22,78,140}
@@ -21,28 +21,28 @@
 % ----------------------- Mise en page ----------------------
 \pagestyle{empty}
 \setlength{\parindent}{0pt}
-\setlist[itemize]{leftmargin=1.15em,itemsep=0.5pt,parsep=0pt,topsep=0.5pt,partopsep=0pt}
+\setlist[itemize]{leftmargin=1.25em,itemsep=1.5pt,parsep=0pt,topsep=1.5pt,partopsep=0pt}
 \renewcommand{\labelitemi}{\textcolor{cvblue}{\raisebox{0.2ex}{\scriptsize$\bullet$}}}
 
 % ------------------- Style des sections --------------------
 \titleformat{\section}
-  {\normalfont\normalsize\bfseries\color{cvblue}}
+  {\normalfont\large\bfseries\color{cvblue}}
   {}{0em}{}
-  [\vspace{0.05em}{\color{cvblue}\titlerule[0.9pt]}]
-\titlespacing{\section}{0pt}{0.35em}{0.15em}
+  [\vspace{0.1em}{\color{cvblue}\titlerule[1.1pt]}]
+\titlespacing{\section}{0pt}{0.75em}{0.35em}
 
 % Entrée "Titre à gauche : date à droite"
 \newcommand{\entry}[2]{%
-  \noindent\textbf{#1}\hfill{\footnotesize\textcolor{cvgrey}{#2}}\par\vspace{0.2pt}}
+  \noindent\textbf{#1}\hfill{\small\textcolor{cvgrey}{#2}}\par\vspace{1pt}}
 
 \begin{document}
 
 % ========================= EN-TÊTE =========================
 \begin{center}
-  {\LARGE\bfseries Yassir BIZGUIRNE}\\[0.12em]
-  {\normalsize\color{cvblue}\bfseries Stage Ingénieur / Assistant Ingénieur : Informatique \& Data Science}\\[0.08em]
-  {\small Étudiant Ingénieur à l'Université de Technologie de Compiègne (UTC)}\\[0.2em]
-  {\footnotesize 
+  {\LARGE\bfseries Yassir BIZGUIRNE}\\[0.2em]
+  {\large\color{cvblue}\bfseries Stage Ingénieur / Assistant Ingénieur : Informatique \& Data Science}\\[0.15em]
+  {\normalsize Étudiant Ingénieur à l'Université de Technologie de Compiègne (UTC)}\\[0.35em]
+  {\small 
     \href{tel:+33744800846}{\textbf{+33 7 44 80 08 46}} 
     \textbullet\ \href{mailto:yassir.bizguirne@etu.utc.fr}{\textbf{yassir.bizguirne@etu.utc.fr}} 
     \textbullet\ \href{https://batyass.github.io/portfolio-osx/}{\textbf{Portfolio: batyass.github.io/portfolio-osx}} 
@@ -51,8 +51,8 @@
   }
 \end{center}
 
-\vspace{-0.15em}
-\noindent{\footnotesize\textit{Élève ingénieur passionné par le \textbf{développement logiciel}, l'\textbf{IA générative} et l'\textbf{optimisation des processus}. Solide socle technique (\textbf{backend}, \textbf{bases de données}, \textbf{C++}, \textbf{Python}) associé à une expérience industrielle concrète et réussie chez \textbf{ZEISS}.}}
+\vspace{0.15em}
+\noindent{\small\textit{Élève ingénieur passionné par le \textbf{développement logiciel}, l'\textbf{IA générative} et l'\textbf{optimisation des processus}. Combine un solide socle technique (\textbf{backend}, \textbf{bases de données}, \textbf{C++}, \textbf{Python}) avec une expérience industrielle concrète et réussie chez \textbf{ZEISS}.}}
 
 % ======================== FORMATIONS ========================
 \section{Formations}
@@ -70,48 +70,48 @@
 % ================== EXPÉRIENCES PROFESSIONNELLES ============
 \section{Expériences Professionnelles}
 
-\entry{Stagiaire Ingénieur : Développement \& Optimisation Logistique, \textbf{ZEISS Sunlens}, Italie}{Janv. 2025 -- Févr. 2025}
+\entry{Stagiaire Ingénieur : Développement \& Optimisation Logistique, \textbf{ZEISS Sunlens}, Castiglione Olona (Italie)}{Janv. 2025 -- Févr. 2025}
 \begin{itemize}
   \item Développement autonome d'une application métier de gestion d'inventaire sur \textbf{Microsoft PowerApps} synchronisée avec base de données.
   \item Implémentation d'un système de traçabilité par \textbf{scan de QR codes} pour localiser et mettre à jour les stocks en \textbf{temps réel}.
   \item Pilotage de la réorganisation physique de l'entrepôt selon la méthode \textbf{Lean (5S)}, réduisant drastiquement les temps de recherche.
-  \item Bilan : évaluation « Excellente » par la direction pour l'autonomie démontrée et des résultats dépassant les objectifs.
+  \item Bilan : évaluation « Excellente » par la direction générale pour l'autonomie démontrée et le dépassement des objectifs fixés.
 \end{itemize}
 
 \entry{Journaliste / Chargé de Communication : Scuola Europea di Varese, Bruxelles (Belgique)}{2023}
 \begin{itemize}
-  \item Gestion de la communication média d'une conférence de l'\textbf{Union Européenne} : interviews, captation photo, gestion des réseaux.
+  \item Gestion de la communication média d'une conférence officielle de l'\textbf{Union Européenne} : interviews, captation photo, animation des réseaux.
 \end{itemize}
 
 \entry{Traducteur Technique Indépendant (Freelance)}{2021}
 \begin{itemize}
-  \item Traduction professionnelle d'un manuel industriel de \textbf{80 pages} de l'\textbf{italien} vers l'\textbf{arabe} avec adaptation sectorielle.
+  \item Traduction technique intégrale d'un manuel industriel de \textbf{80 pages} de l'\textbf{italien} vers l'\textbf{arabe} avec adaptation sectorielle.
 \end{itemize}
 
-% ===================== PROJETS ACADÉMIQUES \& TECHNIQUES ==================
+% ===================== PROJETS TECHNIQUES ==================
 \section{Projets Techniques \& Réalisations}
 
 \entry{Jeu vidéo d'enquête 3D propulsé par l'IA (Solva Mystery) | \href{https://github.com/batyass/solva-mystery}{\textcolor{cvblue}{github.com/batyass/solva-mystery}}}{2024}
-\noindent{\scriptsize\textbf{Unity 6000} \,|\, \textbf{API OpenAI (GPT-4o)} \,|\, \textbf{WebGL} \,|\, \textbf{Sora} \,|\, \textbf{DaVinci Resolve}}\par\vspace{0.5pt}
+\noindent{\small\textbf{Unity 6000} \,|\, \textbf{API OpenAI (GPT-4o)} \,|\, \textbf{WebGL} \,|\, \textbf{Sora} \,|\, \textbf{DaVinci Resolve}}\par\vspace{1pt}
 \begin{itemize}
-  \item Navigation \textbf{NavMesh} pour gameplay immersif « Point \& Click » et dialogues dynamiques via un \textbf{Prompt Engineering} strict.
-  \item Production du trailer promotionnel avec l'IA vidéo \textbf{Sora} et montage de continuité sous DaVinci Resolve.
+  \item Navigation \textbf{NavMesh} pour gameplay « Point \& Click » immersif et dialogues dynamiques via un \textbf{Prompt Engineering} strict.
+  \item Production du trailer promotionnel avec l'IA vidéo \textbf{Sora} et montage de continuité visuelle sous DaVinci Resolve.
 \end{itemize}
 
-\entry{Portfolio interactif Mac OS X | \href{https://batyass.github.io/portfolio-osx/}{\textcolor{cvblue}{batyass.github.io/portfolio-osx}}}{2024}
-\noindent{\scriptsize\textbf{JavaScript ES6+} \,|\, \textbf{HTML5 / CSS3} \,|\, \textbf{Terminal interactif}}\par\vspace{0.5pt}
+\entry{Portfolio interactif Mac OS X Leopard | \href{https://batyass.github.io/portfolio-osx/}{\textcolor{cvblue}{batyass.github.io/portfolio-osx}}}{2024}
+\noindent{\small\textbf{JavaScript ES6+} \,|\, \textbf{HTML5 / CSS3 avancé} \,|\, \textbf{Terminal interactif}}\par\vspace{1pt}
 \begin{itemize}
   \item Reproduction d'un bureau macOS : Dock avec magnification physique, fenêtres Aqua manipulables et terminal bash émulé.
 \end{itemize}
 
 \entry{Jeu de plateau interactif (Harmonies) | \href{https://github.com/batyass/harmonies}{\textcolor{cvblue}{github.com/batyass/harmonies}}}{2024}
-\noindent{\scriptsize\textbf{C++} \,|\, \textbf{Qt Framework} \,|\, \textbf{POO}}\par\vspace{0.5pt}
+\noindent{\small\textbf{C++} \,|\, \textbf{Qt Framework} \,|\, \textbf{POO}}\par\vspace{1pt}
 \begin{itemize}
   \item Conception de la logique métier, machine à états, gestion des timers et interface graphique interactive sous \textbf{Qt}.
 \end{itemize}
 
-\entry{Plateforme backend de recrutement \& sécurité | \href{https://github.com/batyass/app-recrutement}{\textcolor{cvblue}{github.com/batyass/app-recrutement}}}{2024}
-\noindent{\scriptsize\textbf{Node.js} \,|\, \textbf{Express.js} \,|\, \textbf{PostgreSQL} \,|\, \textbf{MongoDB}}\par\vspace{0.5pt}
+\entry{Plateforme backend de recrutement \& gestion des accès | \href{https://github.com/batyass/app-recrutement}{\textcolor{cvblue}{github.com/batyass/app-recrutement}}}{2024}
+\noindent{\small\textbf{Node.js} \,|\, \textbf{Express.js} \,|\, \textbf{PostgreSQL} \,|\, \textbf{MongoDB}}\par\vspace{1pt}
 \begin{itemize}
   \item Architecture d'une API REST modulaire : gestion des sessions, authentification sécurisée et requêtes complexes SQL/NoSQL.
 \end{itemize}

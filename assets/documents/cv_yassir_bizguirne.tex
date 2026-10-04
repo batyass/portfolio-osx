@@ -21,7 +21,7 @@
 % ----------------------- Mise en page ----------------------
 \pagestyle{empty}
 \setlength{\parindent}{0pt}
-\setlist[itemize]{leftmargin=1.25em,itemsep=1.5pt,parsep=0pt,topsep=1.5pt,partopsep=0pt}
+\setlist[itemize]{leftmargin=1.25em,itemsep=1.8pt,parsep=0pt,topsep=1.5pt,partopsep=0pt}
 \renewcommand{\labelitemi}{\textcolor{cvblue}{\raisebox{0.2ex}{\scriptsize$\bullet$}}}
 
 % ------------------- Style des sections --------------------
@@ -34,6 +34,10 @@
 % Entrée "Titre à gauche : date à droite"
 \newcommand{\entry}[2]{%
   \noindent\textbf{#1}\hfill{\small\textcolor{cvgrey}{#2}}\par\vspace{1pt}}
+
+% Entrée sans date pour les projets
+\newcommand{\projectentry}[1]{%
+  \noindent\textbf{#1}\par\vspace{1pt}}
 
 \begin{document}
 
@@ -91,26 +95,26 @@
 % ===================== PROJETS TECHNIQUES ==================
 \section{Projets Techniques \& Réalisations}
 
-\entry{Jeu vidéo d'enquête 3D propulsé par l'IA (Solva Mystery) | \href{https://github.com/batyass/solva-mystery}{\textcolor{cvblue}{github.com/batyass/solva-mystery}}}{2024}
+\projectentry{Jeu vidéo d'enquête 3D propulsé par l'IA (Solva Mystery) \hfill \href{https://github.com/batyass/solva-mystery}{\small\textcolor{cvblue}{[github.com/batyass/solva-mystery]}}}
 \noindent{\small\textbf{Unity 6000} \,|\, \textbf{API OpenAI (GPT-4o)} \,|\, \textbf{WebGL} \,|\, \textbf{Sora} \,|\, \textbf{DaVinci Resolve}}\par\vspace{1pt}
 \begin{itemize}
   \item Navigation \textbf{NavMesh} pour gameplay « Point \& Click » immersif et dialogues dynamiques via un \textbf{Prompt Engineering} strict.
   \item Production du trailer promotionnel avec l'IA vidéo \textbf{Sora} et montage de continuité visuelle sous DaVinci Resolve.
 \end{itemize}
 
-\entry{Portfolio interactif Mac OS X Leopard | \href{https://batyass.github.io/portfolio-osx/}{\textcolor{cvblue}{batyass.github.io/portfolio-osx}}}{2024}
+\projectentry{Portfolio interactif Mac OS X Leopard \hfill \href{https://batyass.github.io/portfolio-osx/}{\small\textcolor{cvblue}{[batyass.github.io/portfolio-osx]}}}
 \noindent{\small\textbf{JavaScript ES6+} \,|\, \textbf{HTML5 / CSS3 avancé} \,|\, \textbf{Terminal interactif}}\par\vspace{1pt}
 \begin{itemize}
   \item Reproduction d'un bureau macOS : Dock avec magnification physique, fenêtres Aqua manipulables et terminal bash émulé.
 \end{itemize}
 
-\entry{Jeu de plateau interactif (Harmonies) | \href{https://github.com/batyass/harmonies}{\textcolor{cvblue}{github.com/batyass/harmonies}}}{2024}
+\projectentry{Jeu de plateau interactif (Harmonies) \hfill \href{https://github.com/batyass/harmonies}{\small\textcolor{cvblue}{[github.com/batyass/harmonies]}}}
 \noindent{\small\textbf{C++} \,|\, \textbf{Qt Framework} \,|\, \textbf{POO}}\par\vspace{1pt}
 \begin{itemize}
   \item Conception de la logique métier, machine à états, gestion des timers et interface graphique interactive sous \textbf{Qt}.
 \end{itemize}
 
-\entry{Plateforme backend de recrutement \& gestion des accès | \href{https://github.com/batyass/app-recrutement}{\textcolor{cvblue}{github.com/batyass/app-recrutement}}}{2024}
+\projectentry{Plateforme backend de recrutement \& gestion des accès \hfill \href{https://github.com/batyass/app-recrutement}{\small\textcolor{cvblue}{[github.com/batyass/app-recrutement]}}}
 \noindent{\small\textbf{Node.js} \,|\, \textbf{Express.js} \,|\, \textbf{PostgreSQL} \,|\, \textbf{MongoDB}}\par\vspace{1pt}
 \begin{itemize}
   \item Architecture d'une API REST modulaire : gestion des sessions, authentification sécurisée et requêtes complexes SQL/NoSQL.
